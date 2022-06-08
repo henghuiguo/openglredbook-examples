@@ -585,24 +585,29 @@ void vglLoadDDS(const char* filename, vglImageData* image)
 
     fread(&file_header, sizeof(file_header.magic) + sizeof(file_header.std_header), 1, f);
 
+    bool done = false;
     if (file_header.magic != DDS_MAGIC)
     {
-        goto done_close_file;
+        //goto done_close_file;
+        done = true;
     }
 
-    if (file_header.std_header.ddspf.dwFourCC == DDS_FOURCC_DX10)
+    if (!done && file_header.std_header.ddspf.dwFourCC == DDS_FOURCC_DX10)
     {
         fread(&file_header.dxt10_header, sizeof(file_header.dxt10_header), 1, f);
     }
 
-    if (!vgl_DDSHeaderToImageDataHeader(file_header, image))
-        goto done_close_file;
+    if (!done && !vgl_DDSHeaderToImageDataHeader(file_header, image))
+        //goto done_close_file;
+        done = true;
 
     image->target = vgl_GetTargetFromDDSHeader(file_header);
 
-    if (image->target == GL_NONE)
-        goto done_close_file;
+    if (!done && image->target == GL_NONE)
+        //goto done_close_file;
+        done = true;
 
+if(!done) {
     size_t current_pos = ftell(f);
     size_t file_size;
     fseek(f, 0, SEEK_END);
@@ -641,8 +646,8 @@ void vglLoadDDS(const char* filename, vglImageData* image)
         height >>= 1;
         depth >>= 1;
     }
-
-done_close_file:
+}
+//done_close_file:
     fclose(f);
 }
 

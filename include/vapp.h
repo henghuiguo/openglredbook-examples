@@ -3,6 +3,11 @@
 
 #include "vgl.h"
 
+#ifdef _WIN32
+#else
+    #include <sys/time.h>
+#endif
+
 class VermilionApplication
 {
 protected:

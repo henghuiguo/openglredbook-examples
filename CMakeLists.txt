@@ -2,6 +2,11 @@ cmake_minimum_required (VERSION 2.6)
 
 project (vermilion9)
 
+if(UNIX)
+find_package( X11 REQUIRED )
+list( APPEND GLSLCOOKBOOK_LIBS ${X11_Xrandr_LIB} ${X11_Xi_LIB} ${X11_Xrender_LIB} ${X11_Xdamage_LIB} ${X11_Xxf86vm_LIB} ${X11_Xext_LIB}  ${X11_X11_LIB} ${X11_Xinerama_LIB}  ${X11_Xcursor_LIB})
+endif()
+
 LINK_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
